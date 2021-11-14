@@ -31,26 +31,46 @@ class FindCharucoState(EventState):
 		if (rospy.Time.now() - self.enter_time).to_sec() > 2:
 			rospy.logwarn('Can not get charuco board pose, abandon this position')
 			return 'done'
+
+		try:
+			(base_trans_tool, base_rot_tool) = self.tf_listener.lookupTransform(self.base_link, self.tip_link, rospy.Time(0))
+		except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+			rospy.logwarn('lookupTransform for robot failed!, ' + self.base_link + ', ' + self.tip_link)
+			return
+
 		try:
 			(camera_trans_charuco, camera_rot_charuco) = self.tf_listener.lookupTransform('/calib_camera', '/calib_charuco', rospy.Time.now())
 		except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-			return
-		try:
-			(base_trans_tool, base_rot_tool) = self.tf_listener.lookupTransform(self.base_link, self.tip_link, rospy.Time.now())
-		except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+			rospy.logwarn('lookupTransform for charuco failed!')
 			return
 
 		trans = Transform()
-		trans.translation = camera_trans_charuco
-		trans.rotation = camera_rot_charuco
+		trans.translation.x = camera_trans_charuco[0]
+		trans.translation.y = camera_trans_charuco[1]
+		trans.translation.z = camera_trans_charuco[2]
+		trans.rotation.x = camera_rot_charuco[0]
+		trans.rotation.y = camera_rot_charuco[1]
+		trans.rotation.z = camera_rot_charuco[2]
+		trans.rotation.w = camera_rot_charuco[3]
 		self.base_h_tool.transforms.append(trans)
+		print(self.base_h_tool.transforms)
+		print("============================")
 
 		trans = Transform()
-		trans.translation = base_trans_tool
-		trans.rotation = base_rot_tool
+		trans.translation.x = base_trans_tool[0]
+		trans.translation.y = base_trans_tool[1]
+		trans.translation.z = base_trans_tool[2]
+		trans.rotation.x = base_rot_tool[0]
+		trans.rotation.y = base_rot_tool[1]
+		trans.rotation.z = base_rot_tool[2]
+		trans.rotation.w = base_rot_tool[3]
 		self.camera_h_charuco.transforms.append(trans)
+		print(self.base_h_tool.transforms)
+		print("============================")
 
 		if userdata.result_compute:
+			userdata.base_h_tool = self.base_h_tool
+			userdata.camera_h_charuco = self.camera_h_charuco
 			return 'go_compute'
 		else:
 			return 'done'

@@ -23,14 +23,18 @@ class ComputeCalibState(EventState):
 		self.eye_in_hand_mode = eye_in_hand_mode
 		self.trans_A_list = TransformArray()
 		self.trans_B_list = TransformArray()
-		self.calib_compute_client = ProxyServiceCaller({'compute_effector_camera_quick': compute_effector_camera_quick})
+		self.calib_compute_client = ProxyServiceCaller({'/compute_effector_camera_quick': compute_effector_camera_quick})
+
 	def execute(self, userdata):
 		req = compute_effector_camera_quickRequest(self.trans_A_list, self.trans_B_list)
-		res = self._check_scene_client.call('/check_state_validity', req)
+		print "========================================================================================================"
+		print req
+		print self.trans_B_list
+		res = self.calib_compute_client.call('/compute_effector_camera_quick', req)
 		
 		print('x = ' + str(res.effector_camera.translation.x))
-		print('y = ' + str(res.effector_camera.translation.x))
-		print('z = ' + str(res.effector_camera.translation.x))
+		print('y = ' + str(res.effector_camera.translation.y))
+		print('z = ' + str(res.effector_camera.translation.z))
 		print('qw = ' + str(res.effector_camera.rotation.w))
 		print('qx = ' + str(res.effector_camera.rotation.x))
 		print('qy = ' + str(res.effector_camera.rotation.y))
@@ -43,7 +47,9 @@ class ComputeCalibState(EventState):
 			self.trans_B_list = userdata.base_h_tool
 		else:
 			self.trans_B_list.header = userdata.base_h_tool.header
-			for transform in userdata.base_h_tool:
+			print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+			print userdata.base_h_tool
+			for transform in userdata.base_h_tool.transforms:
 				trans = tf.transformations.quaternion_matrix([transform.rotation.x, transform.rotation.y,
 															  transform.rotation.z, transform.rotation.w])
 				trans[0:3, 3] = [transform.translation.x, transform.translation.y, transform.translation.z]

@@ -34,8 +34,8 @@ class ManualHandEyeCalibrationSM(Behavior):
 		# parameters of this behavior
 		self.add_parameter('eye_in_hand', False)
 		self.add_parameter('calib_pose_num', 10)
-		self.add_parameter('base_link', 'base_link')
-		self.add_parameter('tip_link', 'ee_link')
+		self.add_parameter('base_link', '/base')
+		self.add_parameter('tip_link', '/tool0_controller')
 
 		# references to used behaviors
 
@@ -61,7 +61,7 @@ class ManualHandEyeCalibrationSM(Behavior):
 		with _state_machine:
 			# x:71 y:102
 			OperatableStateMachine.add('Move_Robot_Manually',
-										MoveRobotManuallyState(wait_time=1, pose_num=self.calib_pose_num),
+										MoveRobotManuallyState(wait_time=2, pose_num=self.calib_pose_num),
 										transitions={'done': 'Find_Charuco'},
 										autonomy={'done': Autonomy.Low},
 										remapping={'result_compute': 'result_compute'})

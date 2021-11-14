@@ -23,9 +23,9 @@
 			<max value="20" />
 		</param>
 
-		<param type="text" name="base_link" default="base_link" label="base_link" hint="Sets the base_link" />
+		<param type="text" name="base_link" default="/base" label="base_link" hint="Sets the base_link" />
 
-		<param type="text" name="tip_link" default="ee_link" label="tip_link" hint="Sets the tip_link" />
+		<param type="text" name="tip_link" default="/tool0_controller" label="tip_link" hint="Sets the tip_link" />
 
 	</params>
 
