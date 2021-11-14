@@ -1,0 +1,19 @@
+<package>
+  <name>hand_eye_flexbe_behaviors</name>
+  <version>1.0.0</version>
+  <description>
+     hand_eye_flexbe_behaviors references all implemented behaviors.
+  </description>
+  <maintainer email="todo@todo.com">TODO</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>message_generation</build_depend>
+  <run_depend>message_generation</run_depend>
+  <run_depend>rospy</run_depend>
+
+  <export>
+    <flexbe_behaviors />
+  </export>
+
+</package>

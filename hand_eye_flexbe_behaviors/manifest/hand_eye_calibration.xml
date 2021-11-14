@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="Hand Eye Calibration">
+
+	<executable package_path="hand_eye_flexbe_behaviors.hand_eye_calibration_sm" class="HandEyeCalibrationSM" />
+	<tagstring>v0</tagstring>
+	<author>Andy Chien</author>
+	<date>Tue Nov 09 2021</date>
+	<description>
+		Used to calibrate the camera on hand or in hand
+	</description>
+
+
+	<!-- Contained Behaviors -->
+
+	<!-- Available Parameters -->
+	<params>
+
+		<param type="boolean" name="eye_in_hand" default="False" label="eye_in_hand" hint="Sets the eye_in_hand" />
+
+		<param type="text" name="group_name" default="manipulator" label="group_name" hint="Sets the group_name" />
+
+	</params>
+
+
+</behavior>

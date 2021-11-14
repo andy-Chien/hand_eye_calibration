@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="Manual Hand Eye Calibration">
+
+	<executable package_path="hand_eye_flexbe_behaviors.manual_hand_eye_calibration_sm" class="ManualHandEyeCalibrationSM" />
+	<tagstring>v0</tagstring>
+	<author>Andy Chien</author>
+	<date>Sun Nov 14 2021</date>
+	<description>
+		Execute hand eye calibration by manual
+	</description>
+
+
+	<!-- Contained Behaviors -->
+
+	<!-- Available Parameters -->
+	<params>
+
+		<param type="boolean" name="eye_in_hand" default="False" label="eye_in_hand" hint="Sets the eye_in_hand" />
+
+		<param type="numeric" name="calib_pose_num" default="10" label="calib_pose_num" hint="Sets the calib_pose_num">
+			<min value="0" />
+			<max value="20" />
+		</param>
+
+		<param type="text" name="base_link" default="base_link" label="base_link" hint="Sets the base_link" />
+
+		<param type="text" name="tip_link" default="ee_link" label="tip_link" hint="Sets the tip_link" />
+
+	</params>
+
+
+</behavior>
