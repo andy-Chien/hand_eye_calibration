@@ -24,12 +24,12 @@ class ComputeCalibState(EventState):
 		self.trans_A_list = TransformArray()
 		self.trans_B_list = TransformArray()
 		self.calib_compute_client = ProxyServiceCaller({'/compute_effector_camera_quick': compute_effector_camera_quick})
-
+    
 	def execute(self, userdata):
 		req = compute_effector_camera_quickRequest(self.trans_A_list, self.trans_B_list)
-		print "========================================================================================================"
-		print req
-		print self.trans_B_list
+		print ("========================================================================================================")
+		print (req)
+		print (self.trans_B_list)
 		res = self.calib_compute_client.call('/compute_effector_camera_quick', req)
 		
 		print('x = ' + str(res.effector_camera.translation.x))
@@ -47,14 +47,15 @@ class ComputeCalibState(EventState):
 			self.trans_B_list = userdata.base_h_tool
 		else:
 			self.trans_B_list.header = userdata.base_h_tool.header
-			print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-			print userdata.base_h_tool
+			print ("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+			print (userdata.base_h_tool)
 			for transform in userdata.base_h_tool.transforms:
 				trans = tf.transformations.quaternion_matrix([transform.rotation.x, transform.rotation.y,
 															  transform.rotation.z, transform.rotation.w])
 				trans[0:3, 3] = [transform.translation.x, transform.translation.y, transform.translation.z]
 				trans = tf.transformations.inverse_matrix(trans)
 				trans_B = Transform()
+				trans_B.translation.x, trans_B.translation.y, trans_B.translation.z = trans[:3, 3]
 				trans_B.rotation.x, trans_B.rotation.y, trans_B.rotation.z, \
 					trans_B.rotation.w = tf.transformations.quaternion_from_matrix(trans)
 				self.trans_B_list.transforms.append(trans_B)
