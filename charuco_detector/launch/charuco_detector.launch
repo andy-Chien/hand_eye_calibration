@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+	<!-- Change the following parameters according to the pattern in usage -->
+	<arg name="squares_sides_size_in_meters" default="0.0363" />
+	<arg name="markers_sides_size_in_meters" default="0.0259" />
+	<!-- <arg name="squares_sides_size_in_meters" default="0.0248" />
+	<arg name="markers_sides_size_in_meters" default="0.0155" /> -->
+	<arg name="number_of_squares_in_x" default="3" />
+	<arg name="number_of_squares_in_y" default="5" />
+	<arg name="number_of_markers" default="100" />
+	<arg name="number_of_bits_for_markers_sides" default="4" />
+	<arg name="dictionary_id" default="1" />
+
+	<!-- Change the following 2 topics to match the ones published by your camera sensor -->
+	<arg name="image_topic" default="/rgb/image_raw" />
+	<arg name="camera_info_topic" default="/rgb/camera_info" />
+	<arg name="image_analysis_publish_topic" default="$(arg image_topic)_charuco_detection" />
+	<arg name="charuco_pose_publish_topic" default="$(arg image_topic)_charuco_pose" />
+
+	<!-- Change the charuco TF frame if you need poses to be estimated from several charuco boards -->
+	<arg name="charuco_tf_frame" default="calib_charuco" />
+
+	<!-- If necessary, the TF publisher of the charuco_detector can use a custom frame_id instead of using the one present in the header of the sensor_msgs/Image messages -->
+	<!-- If [sensor_frame_override] is empty, the TF publisher will use [ image_msg.header.frame_id -> charuco_tf_frame ], otherwise it will use [ sensor_frame_override -> charuco_tf_frame ] -->
+	<arg name="sensor_frame_override" default="calib_camera" />
+
+
+	<!-- Fine tune the yaml and parameters below if needed -->
+	<arg name="config_file" default="$(find charuco_detector)/yaml/charuco.yaml" />
+
+	<arg name="use_median_blur" default="false" />
+	<arg name="median_blur_k_size" default="3" /> <!-- must be odd number -->
+
+	<arg name="use_dynamic_range" default="false" />
+
+	<arg name="use_bilateral_filter" default="false" />
+	<arg name="bilateral_filter_pixel_neighborhood" default="5" />
+	<arg name="bilateral_filter_sigma_color" default="100.0" />
+	<arg name="bilateral_filter_sigma_space" default="100.0" />
+	<arg name="bilateral_filter_border_type" default="4" /> <!-- cv::BORDER_DEFAULT -->
+
+	<arg name="use_clahe" default="true" />
+	<arg name="clahe_clip_limit" default="1.0" />
+	<arg name="clahe_size_x" default="2" />
+	<arg name="clahe_size_y" default="2" />
+
+	<arg name="use_adaptive_threshold" default="false" />
+	<arg name="adaptive_threshold_max_value" default="255.0" />
+	<arg name="adaptive_threshold_method" default="1" /> <!-- cv::ADAPTIVE_THRESH_GAUSSIAN_C -->
+	<arg name="adaptive_threshold_type" default="0" /> <!-- cv::THRESH_BINARY -->
+	<arg name="adaptive_threshold_block_size" default="65" />
+	<arg name="adaptive_threshold_constant_offset_from_mean" default="0.0" />
+
+	<arg name="use_static_tf_broadcaster" default="true" />
+	<arg name="tf_broadcaster_republish_rate" default="10.0" /> <!-- only used if > 0 -->
+
+	<node pkg="charuco_detector" type="charuco_detector_node" name="$(anon charuco_detector)" clear_params="true" output="screen">
+		<param name="charuco/squaresSidesSizeM" type="double" value="$(arg squares_sides_size_in_meters)" />
+		<param name="charuco/markersSidesSizeM" type="double" value="$(arg markers_sides_size_in_meters)" />
+		<param name="charuco/numberOfSquaresInX" type="int" value="$(arg number_of_squares_in_x)" />
+		<param name="charuco/numberOfSquaresInY" type="int" value="$(arg number_of_squares_in_y)" />
+		<param name="charuco/numberOfMarkers" type="int" value="$(arg number_of_markers)" />
+		<param name="charuco/numberOfBitsForMarkersSides" type="int" value="$(arg number_of_bits_for_markers_sides)" />
+		<param name="charuco/dictionaryId" type="int" value="$(arg dictionary_id)" />
+
+		<param name="image_topic" type="str" value="$(arg image_topic)" />
+		<param name="camera_info_topic" type="str" value="$(arg camera_info_topic)" />
+		<param name="image_analysis_publish_topic" type="str" value="$(arg image_analysis_publish_topic)" />
+		<param name="charuco_pose_publish_topic" type="str" value="$(arg charuco_pose_publish_topic)" />
+
+		<param name="charuco_tf_frame" type="str" value="$(arg charuco_tf_frame)" />
+		<param name="sensor_frame_override" type="str" value="$(arg sensor_frame_override)" />
+
+		<rosparam command="load" file="$(arg config_file)" ns="charuco" subst_value="true" />
+
+		<param name="use_median_blur" type="bool" value="$(arg use_median_blur)" />
+		<param name="median_blur_k_size" type="int" value="$(arg median_blur_k_size)" />
+
+		<param name="use_dynamic_range" type="bool" value="$(arg use_dynamic_range)" />
+
+		<param name="use_bilateral_filter" type="bool" value="$(arg use_bilateral_filter)" />
+		<param name="bilateral_filter_pixel_neighborhood" type="int" value="$(arg bilateral_filter_pixel_neighborhood)" />
+		<param name="bilateral_filter_sigma_color" type="double" value="$(arg bilateral_filter_sigma_color)" />
+		<param name="bilateral_filter_sigma_space" type="double" value="$(arg bilateral_filter_sigma_space)" />
+		<param name="bilateral_filter_border_type" type="int" value="$(arg bilateral_filter_border_type)" />
+
+		<param name="use_clahe" type="bool" value="$(arg use_clahe)" />
+		<param name="clahe_clip_limit" type="double" value="$(arg clahe_clip_limit)" />
+		<param name="clahe_size_x" type="int" value="$(arg clahe_size_x)" />
+		<param name="clahe_size_y" type="int" value="$(arg clahe_size_y)" />
+
+		<param name="use_adaptive_threshold" type="bool" value="$(arg use_adaptive_threshold)" />
+		<param name="adaptive_threshold_max_value" type="double" value="$(arg adaptive_threshold_max_value)" />
+		<param name="adaptive_threshold_method" type="int" value="$(arg adaptive_threshold_method)" />
+		<param name="adaptive_threshold_type" type="int" value="$(arg adaptive_threshold_type)" />
+		<param name="adaptive_threshold_block_size" type="int" value="$(arg adaptive_threshold_block_size)" />
+		<param name="adaptive_threshold_constant_offset_from_mean" type="double" value="$(arg adaptive_threshold_constant_offset_from_mean)" />
+
+		<param name="use_static_tf_broadcaster" type="bool" value="$(arg use_static_tf_broadcaster)" />
+		<param name="tf_broadcaster_republish_rate" type="double" value="$(arg tf_broadcaster_republish_rate)" />
+	</node>
+</launch>
