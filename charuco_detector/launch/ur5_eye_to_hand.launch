@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+
+<launch>
+    <arg name="robot_ip" default="192.168.0.12"/>
+
+    <include file="$(find azure_kinect_ros_driver)/launch/driver.launch">
+    </include>
+
+    <include file="$(find ur_robot_driver)/launch/ur5_bringup.launch">
+        <arg name="robot_ip" value="$(arg robot_ip)" />
+    </include>
+
+    <include file="$(find ur5_moveit_config)/launch/ur5_moveit_planning_execution.launch">
+    </include>
+
+    <include file="$(find flexbe_app)/launch/flexbe_full.launch">
+    </include>
+    <node pkg="visp_hand2eye_calibration" type="visp_hand2eye_calibration_calibrator" name="visp_hand2eye_calibration_calibrator">
+    </node>
+    <include file="$(find charuco_detector)/launch/charuco_detector.launch">
+    </include>
+    <!-- <node pkg="rviz" type="rviz" name="rviz"> -->
+    <!-- </node> -->
+</launch>

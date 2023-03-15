@@ -36,6 +36,7 @@ class ManualHandEyeCalibrationSM(Behavior):
 		self.add_parameter('calib_pose_num', 10)
 		self.add_parameter('base_link', '/base')
 		self.add_parameter('tip_link', '/tool0_controller')
+		self.add_parameter('calibration_file_name', 'hand_eye_calibration.ini')
 
 		# references to used behaviors
 
@@ -75,7 +76,7 @@ class ManualHandEyeCalibrationSM(Behavior):
 
 			# x:302 y:228
 			OperatableStateMachine.add('Calibration_Computation',
-										ComputeCalibState(eye_in_hand_mode=self.eye_in_hand),
+										ComputeCalibState(eye_in_hand_mode=self.eye_in_hand, calibration_file_name=self.calibration_file_name),
 										transitions={'finish': 'finished'},
 										autonomy={'finish': Autonomy.Off},
 										remapping={'base_h_tool': 'base_h_tool', 'camera_h_charuco': 'camera_h_charuco'})

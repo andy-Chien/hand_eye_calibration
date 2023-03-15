@@ -69,7 +69,8 @@
 		<param name="charuco_pose_publish_topic" type="str" value="$(arg charuco_pose_publish_topic)" />
 
 		<param name="charuco_tf_frame" type="str" value="$(arg charuco_tf_frame)" />
-		<param name="sensor_frame_override" type="str" value="$(arg sensor_frame_override)" />
+		<!-- <param name="sensor_frame_override" type="str" value="$(arg sensor_frame_override)" /> -->
+		<param name="sensor_frame_override" type="str" value="calib_camera" />
 
 		<rosparam command="load" file="$(arg config_file)" ns="charuco" subst_value="true" />
 

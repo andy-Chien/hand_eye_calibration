@@ -52,8 +52,8 @@ class FindCharucoState(EventState):
 		trans.rotation.y = camera_rot_charuco[1]
 		trans.rotation.z = camera_rot_charuco[2]
 		trans.rotation.w = camera_rot_charuco[3]
-		self.base_h_tool.transforms.append(trans)
-		print(self.base_h_tool.transforms)
+		self.camera_h_charuco.transforms.append(trans)
+		print(self.camera_h_charuco.transforms)
 		print("============================")
 
 		trans = Transform()
@@ -64,9 +64,10 @@ class FindCharucoState(EventState):
 		trans.rotation.y = base_rot_tool[1]
 		trans.rotation.z = base_rot_tool[2]
 		trans.rotation.w = base_rot_tool[3]
-		self.camera_h_charuco.transforms.append(trans)
+		self.base_h_tool.transforms.append(trans)
 		print(self.base_h_tool.transforms)
 		print("============================")
+
 
 		if userdata.result_compute:
 			userdata.base_h_tool = self.base_h_tool

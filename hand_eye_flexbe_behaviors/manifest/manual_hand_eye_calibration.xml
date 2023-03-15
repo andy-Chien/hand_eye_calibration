@@ -27,6 +27,8 @@
 
 		<param type="text" name="tip_link" default="/tool0_controller" label="tip_link" hint="Sets the tip_link" />
 
+		<param type="text" name="calibration_file_name" default="hand_eye_calibration.ini" label="calibration_file_name" hint="Sets the calibration_file_name" />
+
 	</params>
 
 
